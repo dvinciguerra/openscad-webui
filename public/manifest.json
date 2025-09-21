@@ -1,0 +1,13 @@
+{
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "orientation": "any",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "en-US",
+  "name": "OpenSCAD Web UI",
+  "short_name": "OpenSCADUI",
+  "scope": "/",
+  "start_url": "/",
+  "description": "Web-based UI for OpenSCAD"
+}

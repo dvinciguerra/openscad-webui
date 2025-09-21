@@ -1,0 +1,44 @@
+
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OpenSCAD Web UI</title>
+
+    <!-- pwa-metadata -->
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/icons/openscad-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#212121">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+
+    <!-- MDBootstrap (Material Design para Bootstrap) CSS -->
+    <link href=" https://cdn.jsdelivr.net/npm/mdb-ui-kit@9.2.0/css/mdb.min.css " rel="stylesheet">
+    <link href=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.1/css/fontawesome.min.css " rel="stylesheet">
+
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/codemirror.min.css">
+
+    <!-- CodeMirror Material Theme CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/theme/material.min.css">
+
+    <link rel="stylesheet" href="/css/application.css?v=<%= Time.now.to_i %>">
+  </head>
+  <body>
+
+    <%= yield %>
+
+    <!-- MDBootstrap (Material Design para Bootstrap) JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mdb-ui-kit@9.2.0/js/mdb.umd.min.js"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.1/js/all.min.js "></script>
+
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/addon/mode/simple.min.js"></script>
+
+    <script type='text/javascript' src='/js/application.js?v=<%= Time.now.to_i %>'></script>
+  </body>
+</html>
+
