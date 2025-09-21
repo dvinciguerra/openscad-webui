@@ -1,10 +1,12 @@
-# OpenSCAD WebUI
+# <img src="./public/icons/openscad-48.png" width="32" /> OpenSCAD WebUI
 
 This project provides a web-based user interface for OpenSCAD, allowing users to create, edit, and render 3D models
 directly in their web browsers. It leverages WebAssembly to run OpenSCAD in the browser, providing a seamless experience
 without the need for local installations.
 
-![OpenSCAD WebUI Screenshot](./screenshot.png)
+<div align="center">
+  <img src="./screenshot.png" width="200" />
+</div>
 
 ## Features
 
