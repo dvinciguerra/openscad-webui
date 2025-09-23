@@ -1,1 +1,1 @@
-app: ruby app.rb
+app: ruby app.rb -- --port 4567
