@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     theme: 'material',
     lineWrapping: true,
   });
+
   editor.getWrapperElement().style.fontSize = `${settings.editorFontSize}px`;
 
   const previewCanvas = document.getElementById('preview-canvas');
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Força o CodeMirror a se redimensionar e renderiza o preview
   const editorTab = document.getElementById('nav-tab-editor');
   editorTab.addEventListener('shown.bs.tab', () => {
-    // editor.refresh();
+    editor.refresh();
   });
 
   const previewTab = document.getElementById('nav-tab-preview');
@@ -95,8 +96,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   window.addEventListener('resize', () => {
       const width = previewCanvas.clientWidth;
       const height = previewCanvas.clientHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
+      // renderer.setSize(width, height);
   });
 });
