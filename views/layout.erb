@@ -6,39 +6,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>OpenSCAD Web UI</title>
 
-    <!-- pwa-metadata -->
     <link rel="icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/icons/openscad-icon.png">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#212121">
-    <meta name="apple-mobile-web-app-capable" content="yes">
 
+    <%= partial 'shared/_pwa' %>
+    <%= partial 'shared/_prefetch' %>
 
-    <!-- MDBootstrap (Material Design para Bootstrap) CSS -->
+    <!-- components and style -->
     <link href=" https://cdn.jsdelivr.net/npm/mdb-ui-kit@9.2.0/css/mdb.min.css " rel="stylesheet">
     <link href=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.1/css/fontawesome.min.css " rel="stylesheet">
 
-    <!-- CodeMirror CSS -->
+    <!-- codemirror editor -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/codemirror.min.css">
-
-    <!-- CodeMirror Material Theme CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/theme/material.min.css">
 
+    <!-- application custom styles -->
     <link rel="stylesheet" href="/css/application.css?v=<%= Time.now.to_i %>">
+
+    <%= partial 'shared/_importmap' %>
   </head>
   <body>
 
     <%= yield %>
 
-    <!-- MDBootstrap (Material Design para Bootstrap) JS -->
+    <!-- components js -->
     <script src="https://cdn.jsdelivr.net/npm/mdb-ui-kit@9.2.0/js/mdb.umd.min.js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.1/js/all.min.js "></script>
 
-    <!-- CodeMirror JS -->
+    <!-- codemirror editor js  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/addon/mode/simple.min.js"></script>
 
-    <script type='text/javascript' src='/js/application.js?v=<%= Time.now.to_i %>'></script>
+    <!-- model-viewer 3d preview -->
+    <%# <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script> %>
+    <script type="module" src="/js/stl-viewer/stl-viewer.js"></script>
+
+    <!-- application js -->
+    <script type='module-shim' src='/js/application.js?v=<%= Time.now.to_i %>'></script>
+
+    <script type="module">
+
+      const enabledOutput = false;
+
+      import OpenSCAD from "/js/openscad-wasm/openscad.js";
+      import { addFonts } from "/js/openscad-wasm/openscad.fonts.js";
+      <%# import { addMCAD } from "/js/openscad-wasm/openscad.mcad.js"; %>
+
+      if (enabledOutput) {
+        const filename = "cube.stl";
+
+        // Instantiate the application
+        const instance = await OpenSCAD({noInitialRun: true});
+
+        // Write a file to the filesystem
+        let code = document.querySelector("#code-editor").value;
+        instance.FS.writeFile("/input.scad", code);
+
+        // Run like a command-line program with arguments
+        instance.callMain(["/input.scad", "--enable=manifold", "-o", filename]); // manifold is faster at rendering
+
+        // Read the output 3D-model into a JS byte-array
+        const output = instance.FS.readFile("/"+filename);
+
+        // Generate a link to output 3D-model and download the output STL file
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(
+        new Blob([output], { type: "application/octet-stream" }), null);
+        link.download = filename;
+        document.body.append(link);
+        link.click();
+        link.remove();
+      }
+
+    </script>
   </body>
 </html>
 
