@@ -1,4 +1,15 @@
+import OpenSCAD from "/js/openscad-wasm/openscad.js"
+
 document.addEventListener('DOMContentLoaded', async () => {
+  const editorElement = document.getElementById('code-editor');
+  const localStorageCodeKey = 'scad_editor_content';
+  const localStorageSettingsKey = 'scad_editor_settings';
+
+  const defaultSettings = {
+    editorFontSize: 16,
+    renderFN: 50
+  };
+
   // codemirror editor setup
   CodeMirror.defineSimpleMode("scad", {
     start: [
@@ -21,44 +32,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  const editorElement = document.getElementById('code-editor');
-  const localStorageCodeKey = 'scad_editor_content';
-  const localStorageSettingsKey = 'scad_editor_settings';
-
-  const defaultSettings = {
-    editorFontSize: 16,
-    renderFN: 50
-  };
-
-  // Carregar configurações do localStorage (se existirem)
+  // load settings from localStorage if exists
   let settings = defaultSettings;
   const savedSettings = localStorage.getItem(localStorageSettingsKey);
   if (savedSettings) {
     settings = JSON.parse(savedSettings);
   }
 
-  // Aplicar configurações nos inputs
+  // settings inputs
   document.getElementById('editorFontSize').value = settings.editorFontSize;
   document.getElementById('renderFN').value = settings.renderFN;
 
-  // Atualizar configurações ao alterar inputs
-  document.getElementById('nav-pane-settings').addEventListener('input', (event) => {
-    if (event.target.id === 'editorFontSize') {
-      settings.editorFontSize = parseInt(event.target.value, 10);
-      editor.getWrapperElement().style.fontSize = `${settings.editorFontSize}px`;
-    } else if (event.target.id === 'renderFN') {
-      settings.renderFN = parseInt(event.target.value, 10);
-    }
-    localStorage.setItem(localStorageSettingsKey, JSON.stringify(settings));
-  });
-
-  // Carregar conteúdo do localStorage (se existir)
+  // load saved code from localStorage if exists
   const savedContent = localStorage.getItem(localStorageCodeKey);
   if (savedContent) {
     editorElement.value = savedContent;
   }
 
-  // Inicializa o CodeMirror com o tema e as configurações carregadas
+  // codemirror editor instance
   const editor = CodeMirror.fromTextArea(editorElement, {
     lineNumbers: true,
     mode: 'scad',
@@ -66,36 +57,68 @@ document.addEventListener('DOMContentLoaded', async () => {
     lineWrapping: true,
   });
 
+  // apply saved font size
   editor.getWrapperElement().style.fontSize = `${settings.editorFontSize}px`;
 
-  const previewCanvas = document.getElementById('preview-canvas');
-
-  // Atualiza o localStorage e a pré-visualização ao digitar
+  // save code to localStorage on change
   editor.on('change', () => {
     const content = editor.getValue();
     localStorage.setItem(localStorageCodeKey, content);
   });
 
-  // Força o CodeMirror a se redimensionar e renderiza o preview
+  // blob caching
+  const CACHE_NAME = 'openscad_model_cache';
+
+  // save model (stl blob) to cache
+  const cacheStore = async (blob, name) => {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(name, new Response(blob));
+  };
+
+  // fetch model (stl blob) from cache
+  const cacheFetch = async (name) => {
+    const cache = await caches.open(CACHE_NAME);
+    const response = await cache.match(name);
+    if (response) {
+      return response.blob();
+    }
+    return undefined;
+  };
+
+  // editor tab
   const editorTab = document.getElementById('nav-tab-editor');
   editorTab.addEventListener('shown.bs.tab', () => {
     editor.refresh();
   });
 
-  const previewTab = document.getElementById('nav-tab-preview');
-  previewTab.addEventListener('shown.bs.tab', () => {
-    // renderAndPreview();
+  // preview tab
+  const previewTab = document.getElementById('nav-tab-preview')
+  previewTab.addEventListener('shown.bs.tab', async () => {
+    const openscad = await OpenSCAD({noInitialRun: true, locateFile: (path) => `/js/openscad-wasm/${path}`})
+
+    const scad = editor.getValue()
+
+    openscad.FS.writeFile("/input.scad", scad)
+    openscad.callMain(["/input.scad", "--enable=manifold", "-o", "model.stl"])
+
+    const bytes = openscad.FS.readFile("/model.stl")
+    const blob = new Blob([bytes], {type: "model/stl"})
+    // await cacheStore(blob, 'model.stl');
+    const url = URL.createObjectURL(blob)
+
+    const viewer = document.getElementById("preview-canvas")
+    viewer.model = url
+
+    console.log("STL model loaded into viewer")
+    URL.revokeObjectURL(url);
   });
 
-  // Renderiza o preview na inicialização
+  // load cached blob if exists
   if (savedContent) {
-     // renderAndPreview();
+    // const retrivedBlob = await cacheFetch('model.stl')
+    // if (retrivedBlob) {
+    //   const blob = await retrievedBlob.text()
+    //   console.log('Content of retrieved blob:', blob);
+    // }
   }
-
-  // Listener para redimensionamento do canvas
-  window.addEventListener('resize', () => {
-      const width = previewCanvas.clientWidth;
-      const height = previewCanvas.clientHeight;
-      // renderer.setSize(width, height);
-  });
 });
