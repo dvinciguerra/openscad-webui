@@ -5,7 +5,8 @@ directly in their web browsers. It leverages WebAssembly to run OpenSCAD in the 
 without the need for local installations.
 
 <div align="center">
-  <img src="./screenshot.png" width="200" />
+  <img src="./screenshot.png" width="200" style="margin-right: 10px" />
+  <img src="./screenshot2.png" width="200" />
 </div>
 
 ## Features
