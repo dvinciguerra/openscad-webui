@@ -8,9 +8,11 @@ import {setState, fetchState} from "./models/state.js"
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const editorElement = document.getElementById('code-editor');
-  const localStorageCodeKey = 'scad_editor_content';
-  const localStorageSettingsKey = 'scad_editor_settings';
+  window.FIRST_RUN = true
+
+  const editorElement = document.getElementById('code-editor')
+  const codeKey = KEYS.CODE
+  const settingsKey = KEYS.SETTINGS
 
   const defaultSettings = {
     editorFontSize: 16,
