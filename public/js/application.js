@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const defaultCode = 'cube(100);'
-  const defaulEditorState = {
+  const defaultEditorState = {
     code: defaultCode,
     checksum: await sha1(defaultCode)
   }
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     lineWrapping: true,
   })
 
-  const editorState = fetchState(codeKey, defaulEditorState)
+  const editorState = fetchState(codeKey, defaultEditorState)
   if (editorState) editor.setValue(editorState.code || defaultCode)
 
 
