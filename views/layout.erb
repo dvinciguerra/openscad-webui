@@ -11,16 +11,7 @@
     <%= partial 'shared/_pwa' %>
     <%= partial 'shared/_prefetch' %>
 
-    <!-- components and style -->
-    <link href=" https://cdn.jsdelivr.net/npm/mdb-ui-kit@9.2.0/css/mdb.min.css " rel="stylesheet">
-    <link href=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.1/css/fontawesome.min.css " rel="stylesheet">
-
-    <!-- codemirror editor -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/theme/material.min.css">
-
-    <!-- application custom styles -->
-    <link rel="stylesheet" href="/css/application.css?v=<%= Time.now.to_i %>">
+    <%= partial 'shared/_stylesheet' %>
 
     <%= partial 'shared/_importmap' %>
   </head>
@@ -28,20 +19,7 @@
 
     <%= yield %>
 
-    <!-- components js -->
-    <script src="https://cdn.jsdelivr.net/npm/mdb-ui-kit@9.2.0/js/mdb.umd.min.js"></script>
-    <script src=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.1/js/all.min.js "></script>
-
-    <!-- codemirror editor js  -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.11/addon/mode/simple.min.js"></script>
-
-    <!-- model-viewer 3d preview -->
-    <%# <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script> %>
-    <script type="module" src="/js/stl-viewer/stl-viewer.js"></script>
-
-    <!-- application js -->
-    <script type='module-shim' src='/js/application.js?v=<%= Time.now.to_i %>'></script>
+    <%= partial 'shared/_javascript' %>
   </body>
 </html>
 

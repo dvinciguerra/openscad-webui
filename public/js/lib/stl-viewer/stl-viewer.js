@@ -14,7 +14,7 @@ class STLViewer extends HTMLElement {
   connectedCallback() {
     this.connected = true;
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
+    const shadowRoot = this.attachShadow({mode: 'open'});
     this._container = document.createElement('div');
     this._container.style.width = '100%';
     this._container.style.height = '100%';
@@ -24,19 +24,22 @@ class STLViewer extends HTMLElement {
       throw new Error('model attribute is required');
     }
 
-    // three.js setup 1x
     const parentDimensions = this.parentElement.parentElement.getBoundingClientRect();
 
     const clientWidth = this._container.clientWidth || parentDimensions.width || '200';
     const clientHeight = this._container.clientHeight || parentDimensions.height || '400';
 
-    this.camera = new THREE.PerspectiveCamera(70, clientWidth / clientHeight, 1, 1000);
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    this.camera = new THREE.PerspectiveCamera(70, clientWidth / clientHeight, 0.1, 1000);
+    this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     this.renderer.setSize(clientWidth, clientHeight);
     this._container.appendChild(this.renderer.domElement);
 
+    // camera sets
     this.camera.aspect = clientWidth / clientHeight;
+    this.camera.position.z = 10;
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     this.camera.updateProjectionMatrix();
+
 
     window.addEventListener('resize', () => {
       this.renderer.setSize(this._container.clientWidth, this._container.clientHeight);
@@ -44,13 +47,20 @@ class STLViewer extends HTMLElement {
       this.camera.updateProjectionMatrix();
     });
 
+    // controls sets
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
 
     this.scene = new THREE.Scene();
-    this.scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
+    this.scene.add(new THREE.HemisphereLight(0xd4d4d4, 1.5));
 
-    // loop
+    // grid sets
+    this.grid = new THREE.GridHelper(1000, 100, 0x888888, 0xd4d4d4);
+    this.grid.material.opacity = 0.25;
+    this.grid.material.transparent = true;
+    this.grid.rotation.x = Math.PI / 2;
+    this.scene.add(this.grid);
+
     const animate = () => {
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
@@ -60,10 +70,7 @@ class STLViewer extends HTMLElement {
 
     this._ready = true;
 
-    // se já veio com atributo, carrega
     if (this.hasAttribute('model')) this._loadModel(this.getAttribute('model'));
-
-    console.log(this.parentElement.parentElement.getBoundingClientRect());
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
@@ -77,16 +84,19 @@ class STLViewer extends HTMLElement {
   }
 
   _loadModel(url) {
-    // remove mesh anterior, se houver
-    if (this._mesh) { this.scene.remove(this._mesh); this._mesh.geometry.dispose(); this._mesh.material.dispose(); this._mesh = null; }
+    if (this._mesh) {
+      this.scene.remove(this._mesh);
+      this._mesh.geometry.dispose();
+      this._mesh.material.dispose();
+      this._mesh = null;
+    }
 
     new THREE.STLLoader().load(url, (geometry) => {
-      const material = new THREE.MeshPhongMaterial({ color: 0x6A39FF, specular: 100, shininess: 100 });
+      const material = new THREE.MeshPhongMaterial({color: 0x6A39FF, specular: 100, shininess: 100});
       const mesh = new THREE.Mesh(geometry, material);
       this.scene.add(mesh);
       this._mesh = mesh;
 
-      // centraliza e enquadra
       geometry.computeBoundingBox();
       const center = new THREE.Vector3();
       geometry.boundingBox.getCenter(center);
@@ -96,12 +106,13 @@ class STLViewer extends HTMLElement {
       geometry.boundingBox.getSize(size);
       const largest = Math.max(size.x, size.y, size.z);
       this.camera.position.set(0, 0, largest * 1.5);
-      this.controls.autoRotate = true;
+
+      this.controls.autoRotate = false;
       this.controls.autoRotateSpeed = 1;
     });
   }
 
-  set model(url) { this.setAttribute('model', url); }
+  set model(url) {this.setAttribute('model', url);}
   get model() {return this.getAttribute('model');}
 }
 

@@ -28,3 +28,8 @@
   height: 100%;
   display: block;
 }
+
+#nav-pane-preview {
+  background-color: #1e1e1e;
+}
+

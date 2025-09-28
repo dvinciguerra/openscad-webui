@@ -1,0 +1,16 @@
+<%
+  @imports = %w[
+    /vendors/codemirror@5.65.11/codemirror.min.js
+    /vendors/codemirror@5.65.11/addon/mode/simple.min.js
+
+    /vendors/mbootstrap@9.2.0/mdb.umd.min.js
+    https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.1/js/all.min.js
+  ]
+%>
+
+<!-- javascript imports -->
+<% @imports.each do |src| %>
+<script type="text/javascript" src="<%= src %>?v=<%= Time.now.to_i %>"></script>
+<% end %>
+
+<script type='module' src='/js/application.js?v=<%= Time.now.to_i %>'></script>

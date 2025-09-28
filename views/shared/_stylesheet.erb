@@ -1,0 +1,16 @@
+<%
+  @stylesheets = %w[
+    /vendors/mbootstrap@9.2.0/mdb.min.css
+    https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.1/css/fontawesome.min.css
+    /vendors/codemirror@5.65.11/codemirror.min.css
+    /vendors/codemirror@5.65.11/theme/material.min.css
+  ]
+%>
+
+<!-- stylesheets -->
+<% @stylesheets.each do |href| %>
+<link href="<%= href %>" rel="stylesheet">
+<% end %>
+
+<!-- application custom styles -->
+<link rel="stylesheet" href="/css/application.css?v=<%= Time.now.to_i %>">
