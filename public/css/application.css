@@ -34,6 +34,8 @@
 }
 
 /* console panel */
+.btn-console { width: 5rem; height: 5rem; font-size: 2rem; }
+
 .console-panel { height: 38vh; min-height: 180px; }
 
 .console-output {
