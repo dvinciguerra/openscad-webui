@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const editor = CodeMirror.fromTextArea(editorElement, {
     lineNumbers: true,
     mode: 'scad',
-    theme: 'material',
+    theme: 'mdn-like',
     lineWrapping: true,
   })
 
