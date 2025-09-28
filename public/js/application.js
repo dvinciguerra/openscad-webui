@@ -17,40 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const defaultSettings = {
     editorFontSize: 16,
     renderFN: 50
-  };
-
-  // codemirror editor setup
-  CodeMirror.defineSimpleMode("scad", {
-    start: [
-      {regex: /"(?:[^\\]|\\.)*?"/, token: "string"},
-      {regex: /(?:module|function|include|use)\b/, token: "scad-special"},
-      {regex: /(?:for|if|else)\b/, token: "scad-keyword"},
-      {regex: /(?:translate|rotate|scale|mirror|multmatrix|color|minkowski|hull|union|difference|intersection|render)\b/, token: "scad-keyword"},
-      {regex: /(?:circle|square|polygon|text|sphere|cube|cylinder|polyhedron)\b/, token: "scad-keyword"},
-      {regex: /(?:children|each|undef)\b/, token: "scad-keyword"},
-      {regex: /\/\/.*/, token: "comment"},
-      {regex: /\/\*.*\*\//, token: "comment"},
-      {regex: /[-+\/*=<>!]+/, token: "operator"},
-      {regex: /[\d.]+/, token: "number"},
-      {regex: /[\w$]+/, token: "variable"},
-      {regex: /[\{\}\[\]\(\);,]/, token: "bracket"}
-    ],
-    meta: {
-      dontIndentStates: ["comment"],
-      lineComment: "//"
-    }
-  });
-
-  // load settings from localStorage if exists
-  let settings = defaultSettings;
-  const savedSettings = localStorage.getItem(localStorageSettingsKey);
-  if (savedSettings) {
-    settings = JSON.parse(savedSettings);
   }
 
-  // settings inputs
-  document.getElementById('editorFontSize').value = settings.editorFontSize;
-  document.getElementById('renderFN').value = settings.renderFN;
+  const defaultCode = 'cube(100);'
+  const defaulEditorState = {
+    code: defaultCode,
+    checksum: await sha1(defaultCode)
+  }
 
   // load saved code from localStorage if exists
   const savedContent = localStorage.getItem(localStorageCodeKey);
