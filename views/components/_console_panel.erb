@@ -1,0 +1,74 @@
+<button
+  class="btn btn-primary btn-floating position-fixed bottom-0 end-0 m-3 z-3"
+  type="button"
+  data-mdb-toggle="offcanvas"
+  data-mdb-target="#consolePanel"
+  aria-controls="consolePanel"
+  data-toggle="offcanvas"
+  data-target="#consolePanel"
+  title="Show logs"
+>
+  <i class="fas fa-terminal"></i>
+</button>
+
+<!-- console bottom panel -->
+<div class="offcanvas offcanvas-bottom console-panel" tabindex="-1" id="consolePanel" aria-labelledby="consolePanelLabel">
+  <div class="offcanvas-header py-2 border-bottom">
+    <h6 class="offcanvas-title" id="consolePanelLabel">
+      Console
+      <small class="text-muted">• OpenSCAD / App logs</small>
+    </h6>
+    <div class="d-flex gap-2">
+      <button class="btn btn-sm btn-light" id="btnClearLogs" title="Clear logs"><i class="fas fa-broom"></i></button>
+      <button class="btn btn-sm btn-light" id="btnClearProblems" title="Clear problems"><i class="fas fa-eraser"></i></button>
+      <button class="btn btn-sm btn-outline-secondary" data-mdb-dismiss="offcanvas" data-mdb-target="#consolePanel" aria-label="Close"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
+  <div class="offcanvas-body p-0 d-flex flex-column">
+    <!-- Tabs -->
+    <ul class="nav nav-pills px-3 pt-2" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a data-mdb-tab-init class="nav-link active" id="console-tab-logs" href="#console-pane-logs" role="tab" aria-controls="console-pane-logs" aria-selected="true">
+          <i class="fas fa-stream me-1"></i> Logs
+          <span class="badge rounded-pill bg-secondary ms-2" id="badgeLogs">0</span>
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a data-mdb-tab-init class="nav-link" id="console-tab-problems" href="#console-pane-problems" role="tab" aria-controls="console-pane-problems" aria-selected="false">
+          <i class="fas fa-bug me-1"></i> Problems
+          <span class="badge rounded-pill bg-danger ms-2" id="badgeProblems">0</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content flex-grow-1">
+      <div class="tab-pane fade show active h-100" id="console-pane-logs" role="tabpanel" aria-labelledby="console-tab-logs">
+        <pre id="logOutput" class="console-output m-0 p-3"></pre>
+      </div>
+
+      <div class="tab-pane fade h-100" id="console-pane-problems" role="tabpanel" aria-labelledby="console-tab-problems">
+        <div class="table-responsive h-100">
+          <table class="table table-sm table-hover align-middle mb-0">
+            <thead class="table-light position-sticky top-0">
+              <tr>
+                <th style="width: 80px;">Severity</th>
+                <th style="width: 70px;">Line</th>
+                <th style="width: 70px;">Col</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody id="problemsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- (Opcional) alça para redimensionar -->
+    <div class="resize-handle text-center py-1 text-muted small">
+      <i class="fas fa-grip-lines"></i> drag to resize
+    </div>
+  </div>
+</div>
+
