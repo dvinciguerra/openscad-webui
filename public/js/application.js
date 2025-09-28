@@ -1,4 +1,11 @@
-import OpenSCAD from "/js/openscad-wasm/openscad.js"
+import './lib/stl-viewer/stl-viewer.js'
+import OpenSCAD from "/vendors/openscad-wasm/openscad.js"
+
+import {encode as sha1} from './lib/digest.js'
+import {SCAD_MODE, SCAD_NAME} from './lib/codemirror/index.js'
+import {KEYS} from './models/cache.js'
+import {setState, fetchState} from "./models/state.js"
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   const editorElement = document.getElementById('code-editor');
