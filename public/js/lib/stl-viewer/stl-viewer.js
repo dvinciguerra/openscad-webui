@@ -59,7 +59,6 @@ class STLViewer extends HTMLElement {
     this.grid.material.opacity = 0.25;
     this.grid.material.transparent = true;
     this.grid.rotation.x = Math.PI / 2;
-    // this.grid.position.y = -0.01;
     this.scene.add(this.grid);
 
     const animate = () => {
@@ -102,11 +101,6 @@ class STLViewer extends HTMLElement {
       const center = new THREE.Vector3();
       geometry.boundingBox.getCenter(center);
       geometry.translate(-center.x, -center.y, -center.z);
-
-      // const size = new THREE.Vector3();
-      // geometry.boundingBox.getSize(size);
-      // const largest = Math.max(size.x, size.y, size.z);
-      // this.camera.position.set(largest, largest / 2, largest );
 
       const size = new THREE.Vector3();
       geometry.boundingBox.getSize(size);
