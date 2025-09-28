@@ -1,3 +1,5 @@
+import { ConsolePanel } from './lib/console_panel.js'
+
 import './lib/stl-viewer/stl-viewer.js'
 import OpenSCAD from "/vendors/openscad-wasm/openscad.js"
 
@@ -5,6 +7,7 @@ import {encode as sha1} from './lib/digest.js'
 import {SCAD_MODE, SCAD_NAME} from './lib/codemirror/index.js'
 import {KEYS} from './models/cache.js'
 import {setState, fetchState} from "./models/state.js"
+
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -63,6 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     theme: 'material',
     lineWrapping: true,
   })
+  console.log(editor)
 
   const editorState = fetchState(codeKey, defaultEditorState)
   if (editorState) editor.setValue(editorState.code || defaultCode)
@@ -125,4 +129,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     URL.revokeObjectURL(url)
   })
+
+  // console panel
+  const togglePanel = (event) => {
+    event.preventDefault()
+    const target = event.currentTarget
+
+    const element = target.getAttribute('data-mdb-target')
+    if (!element) return
+
+    const offcanvas = document.querySelector(element)
+    if (!offcanvas) return
+
+    if (offcanvas.classList.contains('show')) offcanvas.classList.remove('show')
+    else offcanvas.classList.add('show')
+  }
+
+  document.querySelector('button[data-mdb-toggle="offcanvas"]').addEventListener('click', togglePanel)
+  document.querySelector('button[data-mdb-dismiss="offcanvas"]').addEventListener('click', togglePanel)
+
+  ConsolePanel.log('OpenSCAD WebUI Loaded!')
 })
