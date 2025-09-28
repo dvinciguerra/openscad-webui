@@ -50,8 +50,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const previousState = fetchState(codeKey, {})
 
     const needToBeUpdated = (previousState.lastBuild !== currentState.checksum)
-    console.log(previousState.checksum, currentState.checksum, needToBeUpdated)
-    console.log(previousState, currentState)
     if (!needToBeUpdated) return false
 
     setState(codeKey, {...previousState, ...currentState, lastBuild: currentState.checksum})
@@ -84,7 +82,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const editorTab = document.getElementById('nav-tab-editor')
   editorTab.addEventListener('shown.bs.tab', async () => {
     const changed = await hasEditorChanged({code: editor.getValue()})
-    console.log('Editor changed?', changed)
     editor.refresh()
   })
 
@@ -96,11 +93,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // skip initial build on page load and
     //  skips build if code checksum is diferent that last build checksum
     if (!needToBuildModel && !window.FIRST_RUN) {
-      console.log('Skipping build, code not changed')
       return
     }
 
-    console.log([needToBuildModel, window.FIRST_RUN])
     window.FIRST_RUN = false
 
     // TODO: show loading status
