@@ -33,3 +33,26 @@
   background-color: #1e1e1e;
 }
 
+/* console panel */
+.console-panel { height: 38vh; min-height: 180px; }
+
+.console-output {
+  background: #111; color: #e6e6e6; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  overflow: auto; white-space: pre-wrap; word-break: break-word;
+  height: 100%;
+}
+
+.console-output .log-info    { color: #b3e5fc; }
+.console-output .log-warn    { color: #ffd54f; }
+.console-output .log-error   { color: #ff8a80; }
+
+.cm-problem-error   { background: rgba(255, 82, 82, 0.25); }
+.cm-problem-warning { background: rgba(255, 214, 0, 0.25); }
+
+.cm-gutter-problems .cm-marker {
+  width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-left: 2px;
+}
+.cm-marker-error   { background: #ff5252; }
+.cm-marker-warning { background: #ffd600; }
+
+.console-panel .resize-handle { cursor: ns-resize; user-select: none; background: #f7f7f7; border-top: 1px solid #eee; }
