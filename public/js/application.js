@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentState.checksum = await sha1(currentState.code)
 
     const previousState = fetchState(codeKey, {})
-    return previousState.checksum != currentState.checksum
+    return previousState.checksum !== currentState.checksum
   }
 
   const needBuild = async (currentState = {}) => {
