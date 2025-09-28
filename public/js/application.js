@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       blob = new Blob([bytes], {type: "model/stl"})
     }
     catch (e) {
-      alert('Compile Error: cannot be able to compile scad.')
+      alert('Compile Error: Unable to compile SCAD code.')
       return
     }
 
